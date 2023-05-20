@@ -39,6 +39,14 @@ jobs:
 
   install:
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        k8s:
+          - v1.26.0
+          - v1.25.3
+          - v1.24.7
+          - v1.23.13
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -55,8 +63,11 @@ jobs:
       - name: Set up chart-testing
         uses: helm/chart-testing-action@v2.4.0
 
-      - name: Create kind cluster
-        uses: helm/kind-action@v1.4.0
+      - name: Create kind ${{ matrix.k8s }} cluster
+        uses: helm/kind-action@2d96ac1d715d2ea5abee55927b0cce7ec07ca148 
+        with:
+          node_image: kindest/node:${{ matrix.k8s }}
+          version: v0.17.0 
 
 
       - name: Run chart-testing (install all)
