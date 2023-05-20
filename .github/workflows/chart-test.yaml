@@ -48,15 +48,16 @@ jobs:
           submodules: recursive
 
       - name: Set up Helm
-        uses: ./.github/actions/setup-helm
+        uses: azure/setup-helm@v3
         with:
-          version: v3.10.0
+          version: v3.11.2
 
       - name: Set up chart-testing
-        uses: ./.github/actions/chart-testing-action
+        uses: helm/chart-testing-action@v2.4.0
 
       - name: Create kind cluster
-        uses: ./.github/actions/kind-action
+        uses: helm/kind-action@v1.4.0
+
 
       - name: Run chart-testing (install all)
         run: ct install --target-branch main --all --upgrade --chart-dirs .
